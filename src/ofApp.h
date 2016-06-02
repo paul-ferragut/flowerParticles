@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "particleFlower.h"
 
+#include "ofxGui.h"
+
 #define STATE_UPDATE 0
 #define STATE_ENDED 1
 #define STATE_INACTIVE 2
@@ -35,7 +37,9 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+    ofxPanel gui;
     
+    ofxFloatSlider attraction;
     vector<branch>b;
 		
 };

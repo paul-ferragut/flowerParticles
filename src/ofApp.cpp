@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
+    
+    gui.setup();
+    gui.add(attraction.setup("attract",0.5,0.0,5.0));
 	
 	vector<particleFlower>tPV;
 
@@ -20,7 +24,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	ofSetBackgroundAuto(false);
+	//ofSetBackgroundAuto(false);
 	for (int i = 0;i < b.size();i++) {
 		for (int j = 0;j < b[i].p.size();j++) {
 			int createNew = 0;
@@ -29,7 +33,7 @@ void ofApp::update(){
 				if (b[i].currentLevel < b[i].maxBranches) {
 					b[i].currentLevel++;
 				
-					int newBranch = ofRandom(2, 5);
+					int newBranch = ofRandom(1, 4);
 
 					for (int k = 0;k < newBranch;k++) {
 						particleFlower tP;
@@ -46,8 +50,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofEnableAlphaBlending();
-	ofSetColor(0, 0, 0, 100);
+	//ofEnableAlphaBlending();
+	//ofSetColor(0, 0, 0, 100);
 	for (int i = 0;i < b.size();i++) {
 		for (int j = 0;j < b[i].p.size();j++) {
 			b[i].p[j].draw();

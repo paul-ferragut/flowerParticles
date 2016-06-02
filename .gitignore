@@ -3,9 +3,17 @@ bin/flowerParticles_debug.lib
 *.dll
 *.pdb
 bin/flowerParticles_debug.exp
+bin/
 *.exe
 *.tlog
 *.obj
 *.log
 *.cache
 *.suo
+*.dylib
+
+*.tiff
+
+flowerParticles.xcodeproj/project.xcworkspace/xcuserdata/paulferragut.xcuserdatad/UserInterfaceState.xcuserstate
+
+*.xcuserstate

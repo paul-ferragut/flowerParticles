@@ -34,16 +34,18 @@ void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
 	dir = direction;
 	
 
+    attraction=
+    
 	scale = normalizedLevel;
 	
 	//if( mode == PARTICLE_MODE_NOISE ){
 	//	drag  = ofRandom(0.97, 0.99);
 	//	vel.y = fabs(vel.y) * 3.0; //make the particles all be going down
 	//}else{
-		drag  = ofRandom(0.95, 0.998);	
+    drag  = 0.95;//ofRandom(0.95, 0.998);
 	//}
     
-    durationEnd=ofRandom(1000,2000)* (normalizedLevel);
+    durationEnd=ofRandom(500,700)* (normalizedLevel);
     duration=0;
 	ended = false;
     
@@ -77,14 +79,20 @@ int particleFlower::update(){
 		frc.normalize(); 
 		
 		vel *= drag; 
-		if( dist < 150 ){
-			vel += -frc * 0.006; //notice the frc is negative 
-		}else{
+		//if( dist < 1500 ){
+	
+		//}else{
+            
+            ofVec2f frc2;
 			//if the particles are not close to us, lets add a little bit of random movement using noise. this is where uniqueVal comes in handy. 			
-			frc.x = ofSignedNoise(uniqueVal, pos.y * 0.01, ofGetElapsedTimef()*0.2);
-			frc.y = ofSignedNoise(uniqueVal, pos.x * 0.01, ofGetElapsedTimef()*0.2);
-			vel += frc * 0.004;
-		}
+			frc2.x = ofSignedNoise(uniqueVal, pos.y * 0.01, ofGetElapsedTimef()*0.2);
+			frc2.y = ofSignedNoise(uniqueVal, pos.x * 0.01, ofGetElapsedTimef()*0.2);
+			vel += frc2 * 0.004;
+        
+        vel += -frc * (0.003*scale); //notice the frc is negative
+        
+        
+		//}
 	/*
     }
 	else if( mode == PARTICLE_MODE_NOISE ){
@@ -110,7 +118,12 @@ int particleFlower::update(){
 	
 	//2 - UPDATE OUR POSITION
 	
-	pos += vel; 
+	pos += vel;
+        if((duration % 21 == 20) || durationEnd==duration+1){
+        trail.push_back(pos);
+        }
+        
+        
 	
         return STATE_UPDATE;
 	}
@@ -152,7 +165,7 @@ ofVec2f particleFlower::getPos(){
 void particleFlower::draw(){
     
     
-    ofSetColor(150,150,150);
+    ofSetColor(scale*255,scale*255,scale*255);
     /*
 	if( mode == PARTICLE_MODE_ATTRACT ){
 		ofSetColor(255, 63, 180);
@@ -167,6 +180,15 @@ void particleFlower::draw(){
 		ofSetColor(103, 160, 237);
 	}*/
 			
-	ofDrawCircle(pos.x, pos.y, scale * 4.0);
+    ofSetLineWidth(scale*4.0);
+    if(trail.size()>1){
+    for(int i=0;i<trail.size()-1;i++){
+    
+    ofDrawLine(trail[i].x, trail[i].y, trail[i+1].x, trail[i+1].y);
+        
+    }
+        }
+    
+	ofDrawCircle(pos.x, pos.y, scale * 3.0);
 }
 

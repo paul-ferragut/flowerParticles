@@ -32,6 +32,10 @@ class particleFlower{
     
 	bool ended;
     
+    float attraction;
+    
+    
+    vector<ofVec2f>trail;
     
 		float drag; 
 		float uniqueVal;
