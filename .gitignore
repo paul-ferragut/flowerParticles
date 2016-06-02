@@ -8,3 +8,4 @@ bin/flowerParticles_debug.exp
 *.obj
 *.log
 *.cache
+*.suo
