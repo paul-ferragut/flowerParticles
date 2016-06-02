@@ -1,0 +1,10 @@
+*.ilk
+bin/flowerParticles_debug.lib
+*.dll
+*.pdb
+bin/flowerParticles_debug.exp
+*.exe
+*.tlog
+*.obj
+*.log
+*.cache

@@ -1,4 +1,4 @@
-#include "demoParticle.h"
+#include "particleFlower.h"
 
 //------------------------------------------------------------------
 particleFlower::particleFlower(){
@@ -23,15 +23,18 @@ void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
     uniqueVal = ofRandom(-10000, 10000);
     pos = origin;
     
-    
+    float normalizedLevel = ofMap(subDivision, 0, 60, 1.0, 0.01, true);
     //TO DO DIRECTION, WEAKER ACCORDING TO SUBDivison
     
-    vel.x = ofRandom(-3.9, 3.9);
-	vel.y = ofRandom(-3.9, 3.9);
+    vel.x = ofRandom(-0.002, 0.002)* normalizedLevel;
+	vel.y = ofRandom(-0.002, 0.002)* normalizedLevel;
 	
 	frc   = ofPoint(0,0,0);
 	
-	scale = ofRandom(0.5, 1.0);
+	dir = direction;
+	
+
+	scale = normalizedLevel;
 	
 	//if( mode == PARTICLE_MODE_NOISE ){
 	//	drag  = ofRandom(0.97, 0.99);
@@ -40,19 +43,20 @@ void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
 		drag  = ofRandom(0.95, 0.998);	
 	//}
     
-    durationEnd=ofRandom(100,400);
+    durationEnd=ofRandom(1000,2000)* (normalizedLevel);
     duration=0;
+	ended = false;
     
 }
 
 //------------------------------------------------------------------
-bool particleFlower::update(){
+int particleFlower::update(){
 
     
     
     
     duration++;
-    if(duration>durationEnd){
+    if(duration<durationEnd){
     
 	//1 - APPLY THE FORCES BASED ON WHICH MODE WE ARE IN 
 	/*
@@ -65,7 +69,7 @@ bool particleFlower::update(){
 		vel += frc * 0.6; //apply force
 	}
 	else if( mode == PARTICLE_MODE_REPEL ){*/
-		ofPoint attractPt(ofGetMouseX(), ofGetMouseY());
+		ofPoint attractPt(dir);
 		frc = attractPt-pos; 
 		
 		//let get the distance and only repel points close to the mouse
@@ -74,12 +78,12 @@ bool particleFlower::update(){
 		
 		vel *= drag; 
 		if( dist < 150 ){
-			vel += -frc * 0.6; //notice the frc is negative 
+			vel += -frc * 0.006; //notice the frc is negative 
 		}else{
 			//if the particles are not close to us, lets add a little bit of random movement using noise. this is where uniqueVal comes in handy. 			
 			frc.x = ofSignedNoise(uniqueVal, pos.y * 0.01, ofGetElapsedTimef()*0.2);
 			frc.y = ofSignedNoise(uniqueVal, pos.x * 0.01, ofGetElapsedTimef()*0.2);
-			vel += frc * 0.04;
+			vel += frc * 0.004;
 		}
 	/*
     }
@@ -108,11 +112,12 @@ bool particleFlower::update(){
 	
 	pos += vel; 
 	
-        return true;
-    }else{
-    
-        return false;
-    
+        return STATE_UPDATE;
+	}
+	else if (duration == durationEnd) {
+		return STATE_ENDED;
+	}else if (duration > durationEnd) {
+		return STATE_INACTIVE;
     }
         
 	
