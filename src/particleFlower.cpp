@@ -2,7 +2,7 @@
 
 //------------------------------------------------------------------
 particleFlower::particleFlower(){
-	attractPoints = NULL;
+
 }
 //------------------------------------------------------------------
 particleFlower::~particleFlower(){
@@ -11,18 +11,13 @@ particleFlower::~particleFlower(){
 
 
 //------------------------------------------------------------------
-void particleFlower::setAttractPoints( vector <ofPoint> * attract ){
-	attractPoints = attract;
-}
 
-//------------------------------------------------------------------
-
-void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
+void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision) {
 	
     
     uniqueVal = ofRandom(-10000, 10000);
     pos = origin;
-    
+	state = STATE_UPDATE;
     float normalizedLevel = ofMap(subDivision, 0, 60, 1.0, 0.01, true);
     //TO DO DIRECTION, WEAKER ACCORDING TO SUBDivison
     
@@ -33,8 +28,9 @@ void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
 	
 	dir = direction;
 	
+	readyDeconstruct = false;
 
-    attraction=
+   // attraction=
     
 	scale = normalizedLevel;
 	
@@ -46,9 +42,10 @@ void particleFlower::setup(ofPoint origin, ofVec2f direction, int subDivision){
 	//}
     
     durationEnd=ofRandom(500,700)* (normalizedLevel);
+	breakEnd = durationEnd + ofRandom(1, 900);//*(normalizedLevel);
     duration=0;
-	ended = false;
-    
+	//ended = false;
+
 }
 
 //------------------------------------------------------------------
@@ -124,12 +121,28 @@ int particleFlower::update(){
         }
         
         
-	
+		state = STATE_UPDATE;
         return STATE_UPDATE;
 	}
 	else if (duration == durationEnd) {
+		state = STATE_ENDED;
 		return STATE_ENDED;
 	}else if (duration > durationEnd) {
+
+
+		if (duration > breakEnd && readyDeconstruct==true) {
+			if (trail.size() != 0) {
+				trail.erase(trail.begin());
+				state = STATE_DECONSTRUCT;
+				return STATE_DECONSTRUCT;
+			}
+			else if (trail.size() == 0) {
+				state = STATE_READY;
+				return STATE_READY;
+			}
+			
+		}
+		state = STATE_INACTIVE;
 		return STATE_INACTIVE;
     }
         
@@ -162,10 +175,10 @@ ofVec2f particleFlower::getPos(){
 }
 
 //------------------------------------------------------------------
-void particleFlower::draw(){
+void particleFlower::draw(ofColor colStart, ofColor colEnd){
+	//float scaleN = ofMap(scale, 0.0f, 1.0f, 1.0f, 0.1f,true);
     
-    
-    ofSetColor(scale*255,scale*255,scale*255);
+    ofSetColor(colStart.lerp(colEnd,scale));
     /*
 	if( mode == PARTICLE_MODE_ATTRACT ){
 		ofSetColor(255, 63, 180);
@@ -180,7 +193,7 @@ void particleFlower::draw(){
 		ofSetColor(103, 160, 237);
 	}*/
 			
-    ofSetLineWidth(scale*4.0);
+    ofSetLineWidth(scale*2.0);
     if(trail.size()>1){
     for(int i=0;i<trail.size()-1;i++){
     
@@ -188,7 +201,8 @@ void particleFlower::draw(){
         
     }
         }
-    
-	ofDrawCircle(pos.x, pos.y, scale * 3.0);
+	if (trail.size() > 0) {
+		ofDrawCircle(pos.x, pos.y, scale * 1.5);
+	}
 }
 

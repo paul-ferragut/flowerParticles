@@ -1,22 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
-#include "particleFlower.h"
+#include "branches.h"
 
 #include "ofxGui.h"
 
-#define STATE_UPDATE 0
-#define STATE_ENDED 1
-#define STATE_INACTIVE 2
-
-struct branch{
-
-    vector<particleFlower>p;
-	int currentLevel;
-	int maxBranches;
-	ofVec2f directionPt;
-
-};
 
 class ofApp : public ofBaseApp{
 
@@ -39,7 +27,9 @@ class ofApp : public ofBaseApp{
     
     ofxPanel gui;
     
-    ofxFloatSlider attraction;
-    vector<branch>b;
+	ofxFloatSlider attraction;
+
+	branches branch1;
+
 		
 };

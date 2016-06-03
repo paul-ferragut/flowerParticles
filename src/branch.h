@@ -1,13 +1,21 @@
 #pragma once
-#include "ofMain.h"
+#include "particleFlower.h"
 
 #define STATE_UPDATE 0
 #define STATE_ENDED 1
 #define STATE_INACTIVE 2
-#define STATE_DECONSTRUCT 3
-#define STATE_READY 4
 
-class particleFlower{
+struct branch {
+
+	vector<particleFlower>p;
+	int currentLevel;
+	int maxBranches;
+	ofVec2f directionPt;
+
+};
+
+
+class branches{
 
 	public:
 		particleFlower();
