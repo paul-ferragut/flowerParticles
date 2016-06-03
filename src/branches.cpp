@@ -7,6 +7,7 @@ branches::branches(){
 //------------------------------------------------------------------
 branches::~branches(){
    // attractPoints = NULL;
+	b.clear();
 }
 
 

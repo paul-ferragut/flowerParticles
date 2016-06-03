@@ -7,6 +7,7 @@ particleFlower::particleFlower(){
 //------------------------------------------------------------------
 particleFlower::~particleFlower(){
    // attractPoints = NULL;
+	trail.clear();
 }
 
 
